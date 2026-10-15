@@ -23,7 +23,7 @@ jobs:
           node-version: '22'
       - run: npm test
       - uses: actions/configure-pages@v5
-      - run: mkdir -p dist/docs && cp index.html dist/ && cp -r src dist/ && cp docs/METODIKA.md dist/docs/ && touch dist/.nojekyll
+      - run: mkdir -p dist/docs && cp index.html Fustat-OFL.txt dist/ && cp -r src dist/ && cp docs/METODIKA.md dist/docs/ && touch dist/.nojekyll
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

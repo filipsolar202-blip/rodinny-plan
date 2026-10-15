@@ -1,6 +1,6 @@
 # Rodinný krizový a dědický plán
 
-Česká statická aplikace pro pracovní finanční analýzu rodiny. Bez backendu, analytických služeb, externích knihoven a fontů. Klientské případy zůstávají v IndexedDB. Ve zdrojovém kódu je pouze smyšlená ukázka.
+Česká statická aplikace pro pracovní finanční analýzu rodiny. Bez backendu, analytických služeb a externě načítaných knihoven či fontů. Písmo Fustat je přibalené pod licencí SIL OFL 1.1. Klientské případy zůstávají v IndexedDB. Ve zdrojovém kódu je pouze smyšlená ukázka.
 
 ## Spuštění a testy
 
@@ -45,3 +45,7 @@ Settings → Pages → Source: GitHub Actions. Push do `main` spouští testy a 
 IndexedDB ani JSON nejsou šifrované. Zařízení a zálohy musí být chráněné. Prohlížeč může úložiště vymazat; exportujte pravidelně. Každý origin má vlastní úložiště, localhost a GitHub Pages nesdílejí případy. Přenos mezi zařízeními zatím řeší JSON.
 
 Budoucí adaptér může zachovat rozhraní `all/put/remove` a přidat autentizaci, autorizaci každého případu, oddělení poradců, audit, šifrované zálohy a řešení konfliktů. Lokální šifrování lze řešit Web Crypto AES-GCM s klíčem odvozeným z hesla; klíč se nesmí uložit vedle dat. Synchronizace potřebuje samostatný zabezpečený backend s TLS, řízením přístupu, retenčními pravidly a obnovou. Tyto budoucí funkce v1 nepředstírá. GitHub Pages ani repozitář nesmějí sloužit jako databáze klientů.
+
+## Vzhled
+
+Paleta odpovídá FILIP CRM: modrá #356aa5, doplňková #4b7da3, text #234366 a modrostříbrné rámečky. Stejné písmo Fustat je vložené přímo v CSS, takže funguje i v samostatném HTML reportu bez připojení k internetu. Licence: Fustat-OFL.txt.

@@ -22,3 +22,7 @@ input,select,textarea{border:1.5px solid #a0b7d1;border-radius:12px;background:#
 dialog{background:#f7fafe;border:1.5px solid #a0b7d1;border-radius:22px}dialog::backdrop{background:#23436655}.method-grid article{background:#f7fafe;border-color:#b9cde3;border-radius:16px}#toast{background:linear-gradient(135deg,var(--blue),var(--cyan));box-shadow:0 10px 30px #23436626}
 @media(max-width:740px){h1{font-size:27px}.sidebar{border-right:0;border-bottom:1.5px solid #b9cde3}.metric strong{font-size:23px}.panel{border-radius:18px}.nav button{flex-shrink:0}}
 @media print{body{background:#fff}.panel,.metric,.case-card{background:#fff;box-shadow:none;border:0}.report h1,.report h2,.report h3{color:#254f7d}.table-wrap{overflow:visible}th{background:#edf3fa!important;print-color-adjust:exact}.notice{background:#f7f9fc}}
+/* Keep long currency values inside cards on narrow screens. */
+.metrics{grid-template-columns:repeat(4,minmax(0,1fr))}.metric{min-width:0}.metric strong{overflow-wrap:anywhere}
+@media(max-width:1150px){.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:480px){.metrics{grid-template-columns:1fr}.metric strong{font-size:26px}.metric{padding:18px}}

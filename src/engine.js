@@ -1,3 +1,4 @@
+import {intakeErrors} from './intake-contract.js';
 /** Pure calculation layer. Money stays unrounded until presentation. */
 export const clone = x => structuredClone(x);
 export const today = () => new Intl.DateTimeFormat('sv-SE',{timeZone:'Europe/Prague'}).format(new Date());
@@ -8,6 +9,7 @@ export function validate(c){
  const errors=[]; const add=s=>errors.push(s);
  if(!c||c.version!==1||!Array.isArray(c.people)||!Array.isArray(c.assets)||!Array.isArray(c.relations)||!Array.isArray(c.households))return ['Neplatný formát případu (verze 1).'];
  if(c.people.length>150||c.assets.length>1000||c.relations.length>500)return ['Případ překračuje podporovanou velikost.'];
+ if(c.intake&&(c.intake.version!==1||typeof c.intake.reviewed!=='boolean'||!Array.isArray(c.intake.issues)||c.intake.issues.some(i=>!i||typeof i.label!=='string'||typeof i.note!=='string'||typeof i.resolved!=='boolean'||!['family','assets','protection'].includes(i.section))||intakeErrors(c.intake.source).length))add('Neplatná data klientského dotazníku.');
  const ids=c.people.map(p=>p.id); if(new Set(ids).size!==ids.length)add('ID osob musí být jedinečná.');
  const validDate=s=>typeof s==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(s)&&Number.isFinite(Date.parse(s))&&new Date(s).toISOString().slice(0,10)===s;
  if(!validDate(c.date))add('Neplatné datum modelu.');
@@ -64,7 +66,7 @@ export function statutory(c,id){
  return result(0,[{id:'STATE',share:1}]);
 }
 export function calculate(c,id,{scenario='A',beneficiary}={}){
- let errors=validate(c);const p=c.people?.find(p=>p.id===id);
+ let errors=validate(c);if(c.intake&&(!c.intake.reviewed||!Array.isArray(c.intake.issues)||!c.intake.issues.every(i=>i.resolved&&typeof i.note==='string'&&i.note.trim())))errors.push('Dotazník klienta musí nejdříve zkontrolovat poradce.');const p=c.people?.find(p=>p.id===id);
  if(!p)return {errors:[...errors,'Vyberte osobu pro simulaci.']};
  if(p.dead||p.death)errors.push('Tato osoba již zemřela.');
  if(!c.complete)errors.push('Potvrďte úplnost relevantních rodinných vztahů a majetku.');

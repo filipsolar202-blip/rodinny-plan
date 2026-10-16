@@ -26,3 +26,5 @@ dialog{background:#f7fafe;border:1.5px solid #a0b7d1;border-radius:22px}dialog::
 .metrics{grid-template-columns:repeat(4,minmax(0,1fr))}.metric{min-width:0}.metric strong{overflow-wrap:anywhere}
 @media(max-width:1150px){.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:480px){.metrics{grid-template-columns:1fr}.metric strong{font-size:26px}.metric{padding:18px}}
+
+[hidden]{display:none!important}

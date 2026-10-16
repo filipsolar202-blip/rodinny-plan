@@ -38,7 +38,7 @@ Pátá a šestá třída vyžadují evidenci obou rodičů a čtyř prarodičů 
 
 ## Nasazení
 
-Settings → Pages → Source: GitHub Actions. Push do `main` spouští testy a nasazení. Publikuje se pouze index, src a metodika. Relativní cesty fungují v podadresáři repozitáře.
+Settings → Pages → Source: GitHub Actions. Push do `main` spouští testy a nasazení. Publikuje se obsah sestavení `dist`: aplikace, dotazník, vložené písmo s licencí a metodika. Žádná klientská data. Relativní cesty fungují v podadresáři repozitáře.
 
 ## Ochrana dat a budoucí synchronizace
 
@@ -49,3 +49,15 @@ Budoucí adaptér může zachovat rozhraní `all/put/remove` a přidat autentiza
 ## Vzhled
 
 Paleta odpovídá FILIP CRM: modrá #356aa5, doplňková #4b7da3, text #234366 a modrostříbrné rámečky. Stejné písmo Fustat je vložené přímo v CSS, takže funguje i v samostatném HTML reportu bez připojení k internetu. Licence: Fustat-OFL.txt.
+
+## Dotazník a prezentace
+
+1. V přehledu zkopírujte odkaz na `dotaznik.html` nebo stáhněte samostatný HTML soubor. Soubor funguje i bez připojení; příjemce jej musí otevřít v prohlížeči (náhled přílohy nemusí spouštět formulář).
+2. Klient projde sedm kroků, může uložit rozpracovaný JSON a později pokračovat. Důležité otázky mají povinnou odpověď, včetně výslovného „Nevím“.
+3. V posledním kroku stáhne `odpovedi-rodinny-plan.json` a předá jej poradci dohodnutým kanálem. Formulář nic automaticky neposílá.
+4. Tlačítko „Nahrát odpovědi / zálohu“ vytvoří nový případ; existující nepřepíše. Rozpracovaný či neúplný dotazník odmítne. Neznámé hodnoty zůstávají označené a výpočet je blokovaný do kontroly.
+5. V části Dotazník klienta doplňte skutečné údaje v rodině, majetku a financích. Každý kontrolní bod vyžaduje popis zjištění a potvrzení. Majetek musí mít ověřené hodnoty i vlastnictví. Poté potvrďte úplnost ve správě případu. Kontrola poradcem nenahrazuje právní revizi modelu.
+6. Klientský report je prezentace s postavami, grafickými podíly, navigací a rozbalovacím vysvětlením. HTML obsahuje vzhled i písmo a lze je předat samostatně.
+7. Tisk / PDF: A4 na šířku, 100 %, vypnutá záhlaví a zápatí prohlížeče. Každé téma má vlastní stránku; dlouhý manuál se dělí na pokračování. Tisk zahrnuje všechny stránky i rozbalovací vysvětlení.
+
+Sestavení: `npm run build`; pro kompletní místní náhled spusťte server v `dist`. `npm test` ověřuje výpočty, povinné odpovědi, import a bezpečné generování prezentace. `node scripts/sample-report.mjs` vytvoří pouze smyšlené kontrolní HTML v ignorované složce `output/pdf`. Tato složka se na GitHub Pages neposílá.

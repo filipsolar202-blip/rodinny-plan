@@ -54,3 +54,7 @@ Popisky příbuzenství vycházejí z evidovaných vazeb. Postavička je volitel
 Poradce volí převzetí odpovědí, nebo jejich úpravu. Převzetí zaznamenává zdroj údajů; nejde o nezávislé ověření. Známé hodnoty a uvedené vlastnictví lze použít bez povinných poznámek ke každé položce. Neznámé hodnoty se nikdy nepovažují za potvrzené nuly. Právní situace mimo rozsah modelu zůstávají označené.
 Majetek přijatý darem se odlišuje od darů poskytnutých zůstavitelem. Nabytí darem samo o sobě nezapíná blokaci započtení poskytnutých darů. U položek se uvádí vlastník, režim a způsob nabytí podle klienta. Podklad: https://portal.gov.cz/informace/zakonny-rezim-spolecneho-jmeni-manzelu-INF-50
 Výchozí prezentace obsahuje pouze majetek, rodinné větve, modelovou pozůstalost, příjemce a další kroky. Krizový manuál zůstává dostupný v aplikaci. Rozsáhlá rodina či majetek se stránkují.
+
+## Relevantní osoby a neblokující zahraniční vazba
+Výchozí vizualizace používá zákonný okruh dědiců, vybraného klienta, současného manžela a případného příjemce varianty. Samotná chyba majetkového vstupu nerozšiřuje zobrazení na celou rodinu. Úplná evidence zůstává dostupná pro další scénáře.
+Zahraniční vazba je upozornění, nikoli blokace českého orientačního výpočtu. Aplikace neurčuje rozhodné právo a výsledek neprezentuje jako potvrzený přeshraniční právní výsledek. Upozornění se uvádí i v klientském výstupu. Neznámá hodnota majetku zůstává k doplnění přes přímý odkaz na danou položku.

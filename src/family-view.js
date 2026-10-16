@@ -1,4 +1,4 @@
-import {age} from './engine.js';
+import {age,statutory} from './engine.js';
 export const escapeHtml=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export function appearance(c,p){const sample={jan:['Jan Novák','male'],eva:['Eva Nováková','female'],anna:['Anna Nováková','female'],tomas:['Tomáš Novák','male'],petra:['Petra Nováková','female']};return p?.appearance||(c.demo&&sample[p?.id]?.[0]===p?.name?sample[p.id][1]:'neutral');}
 export function figure(c,p,{dead=false}={}){const years=age(p,c.date),minor=years!==null&&years<18,style=appearance(c,p);return `<svg class="family-figure ${minor?'minor':''} ${dead?'deceased':''}" viewBox="0 0 80 130" aria-hidden="true"><circle cx="40" cy="18" r="13" fill="currentColor"/>${style==='female'?'<path d="M29 36Q40 30 51 36L65 87H15z" fill="currentColor"/><path d="M31 88v31M49 88v31M26 40 15 72M54 40l11 32" stroke="currentColor" stroke-width="9" stroke-linecap="round"/>':'<rect x="25" y="34" width="30" height="52" rx="9" fill="currentColor"/><path d="M30 39H25Q16 39 16 49V76M50 39H55Q64 39 64 49V76M31 80V119M49 80V119" fill="none" stroke="currentColor" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>'}</svg>`;}
@@ -32,3 +32,27 @@ export function familyGroupHtml(c,g,{interactive=false,selected='',deceased=''}=
  return `<article class="kin-group"><div class="kin-caption">${e(relationship)}</div><div class="kin-parents">${g.parents.map(p=>card(p)).join('<span class="kin-plus">+</span>')}</div>${g.children.length?`<div class="kin-arrow">↓ <span>${g.parents.length===2?'Jejich společné děti':'Děti tohoto rodiče · druhý rodič není uveden'}</span></div><div class="kin-children">${g.children.map(p=>card(p,true)).join('')}</div>`:(g.parents.length===2?'<p class="kin-empty">V této dvojici nejsou uvedeny společné děti.</p>':'')}</article>`;
 }
 export function assetDescription(c,a){const owners=Object.keys(a.owners).map(id=>c.people.find(p=>p.id===id)?.name||'Neuvedeno').join(' + ');return `${({sjm:'Společné jmění',exclusive:'Výlučný majetek',shares:'Podílové vlastnictví',unknown:'Vlastníky doplníme',modified:'Smluvený režim'})[a.regime]||a.regime} · ${owners}${a.acquisition?' · Nabytí: '+a.acquisition:''}`;}
+
+// Select people independently of missing asset inputs: those must not expand the family.
+export function inheritanceFamily(c,id,{scenario='A',beneficiary=''}={}){
+ const law=statutory(c,id),ids=new Set([id,...(law.heirs||[]).map(h=>h.id)]);
+ if(scenario==='D'&&beneficiary)ids.add(beneficiary);
+ for(const r of c.relations)if(r.type==='marriage'&&r.start<=c.date&&(!r.end||r.end>c.date)&&(r.a===id||r.b===id))ids.add(r.a===id?r.b:r.a);
+ // Keep deceased links only where needed to explain representation by descendants.
+ const reaches=(pid,seen=new Set())=>{if(pid===id)return true;if(seen.has(pid))return false;seen.add(pid);return (c.people.find(p=>p.id===pid)?.parents||[]).some(x=>reaches(x,new Set(seen)));};
+ for(const heir of law.heirs||[]){let todo=[heir.id],seen=new Set();while(todo.length){const x=todo.pop();if(seen.has(x)||x===id)continue;seen.add(x);for(const parent of c.people.find(p=>p.id===x)?.parents||[])if(reaches(parent)){ids.add(parent);todo.push(parent);}}}
+ return {...c,people:c.people.filter(p=>ids.has(p.id)).map(p=>({...p,parents:p.parents.filter(x=>ids.has(x))})),relations:c.relations.filter(r=>ids.has(r.a)&&ids.has(r.b))};
+}
+export function issueTarget(c,message,selected=''){
+ const person=c.people.find(p=>message===`Doplňte datum narození: ${p.name}.`||message===`Doplnit narození: ${p.name}.`);if(person)return {personId:person.id,field:'birth'};
+ if(message.includes('Existující pořízení')&&selected)return {personId:selected,field:'documentNotes'};
+ if(message.includes('Vyberte žijícího partnera'))return {field:'beneficiary'};
+ if(message.includes('Vyberte osobu'))return {field:'sim-person'};
+ const asset=c.assets.find(a=>message===`Doplňte neznámou hodnotu: ${a.name}.`||message===`Neověřený právní režim: ${a.name}.`||message.startsWith(a.name+': '));
+ if(asset)return {assetId:asset.id,field:asset.intakeUnknownValue?'value':'regime'};
+ if(message.includes('Převezměte'))return {page:'intake'};
+ if(message.includes('úplnost')||message.includes('SJM potřebuje')||message.includes('Dary'))return {page:'settings'};
+ if(message.includes('měna')){const a=c.assets.find(a=>a.currency!=='CZK');if(a)return {assetId:a.id,field:'currency'};}
+ if(message.includes('úplnost'))return {page:'settings',field:'complete'};
+ return {page:'family'};
+}

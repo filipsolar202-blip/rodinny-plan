@@ -70,7 +70,7 @@ export function calculate(c,id,{scenario='A',beneficiary}={}){
  if(!p)return {errors:[...errors,'Vyberte osobu pro simulaci.']};
  if(p.dead||p.death)errors.push('Tato osoba již zemřela.');
  if(!c.complete)errors.push('Potvrďte úplnost relevantních rodinných vztahů a majetku.');
- if(c.international)errors.push('Zahraniční prvek vyžaduje individuální právní posouzení.');
+
  if(c.people.some(p=>p.exception||p.adopted))errors.push('Osvojení nebo výjimka z dědického práva vyžaduje individuální právní posouzení.');
  if(c.households.some(h=>(h.a===id||h.b===id)&&!h.verified))errors.push('Neověřená společná domácnost.');
  if(c.relations.some(r=>['registered','partnership'].includes(r.type)&&(r.a===id||r.b===id)&&!r.end))errors.push('Právní účinky partnerství vyžadují individuální posouzení.');
@@ -81,7 +81,7 @@ export function calculate(c,id,{scenario='A',beneficiary}={}){
  for(const a of relevant){
   if(a.intakeUnknownValue)errors.push(`Doplňte neznámou hodnotu: ${a.name}.`);
   if(a.currency!=='CZK')errors.push('Cizí měna vyžaduje ověřený přepočet do CZK.');
-  if(!a.verified||['unknown','modified'].includes(a.regime)||a.category==='Ručení')errors.push(`Neověřený právní režim: ${a.name}.`);
+  if((!a.verified&&!a.intakeUnknownValue)||['unknown','modified'].includes(a.regime)||a.category==='Ručení')errors.push(`Neověřený právní režim: ${a.name}.`);
   if(a.regime==='sjm'){
    const other=Object.keys(a.owners).find(x=>x!==id);
    const married=c.relations.some(r=>r.type==='marriage'&&[r.a,r.b].includes(id)&&[r.a,r.b].includes(other)&&r.start<=c.date&&(!r.end||r.end>c.date));
@@ -94,14 +94,14 @@ export function calculate(c,id,{scenario='A',beneficiary}={}){
  const debt=sum(relevant.filter(a=>a.kind==='debt').map(a=>a.value*a.owners[id]));const net=gross-debt;
  if(net<0)return {errors:['Předlužená pozůstalost vyžaduje individuální právní posouzení.'],gross,debt,net};
  const desc=new Set();function walk(pid){c.people.filter(x=>x.parents.includes(pid)).forEach(x=>{desc.add(x.id);walk(x.id);});}walk(id);
- const heirs=law.heirs.map(h=>{const hp=c.people.find(p=>p.id===h.id);const years=age(hp,c.date);const descendant=desc.has(h.id); if(descendant&&years===null)errors.push('Doplňte datum narození potomků pro povinné díly.');const reserved=descendant?h.share*(years<18?.75:.25):0;const own=sum(c.assets.map(a=>(a.kind==='asset'?1:-1)*a.value*(a.owners[h.id]||0)));return {...h,descendant,age:years,reserved,minimum:reserved*net,amount:h.share*net,own,total:own+h.share*net};});
+ const heirs=law.heirs.map(h=>{const hp=c.people.find(p=>p.id===h.id);const years=age(hp,c.date);const descendant=desc.has(h.id); if(descendant&&years===null)errors.push(`Doplňte datum narození: ${hp.name}.`);const reserved=descendant?h.share*(years<18?.75:.25):0;const own=sum(c.assets.map(a=>(a.kind==='asset'?1:-1)*a.value*(a.owners[h.id]||0)));return {...h,descendant,age:years,reserved,minimum:reserved*net,amount:h.share*net,own,total:own+h.share*net};});
  let allocation=null;
  if(scenario==='D'){
   const b=c.people.find(p=>p.id===beneficiary);if(!b||b.id===id||b.dead||b.death||desc.has(b.id))errors.push('Vyberte žijícího partnera, který není potomkem zůstavitele.');
   allocation=heirs.filter(h=>h.reserved).map(h=>({id:h.id,value:h.minimum}));allocation.push({id:beneficiary,value:net-sum(heirs.map(h=>h.minimum))});
  }
  if(scenario==='E'){const ds=heirs.filter(h=>h.descendant);if(!ds.length)errors.push('Model zabezpečení dětí vyžaduje potomky.');else allocation=ds.map(h=>({id:h.id,value:net*h.share/sum(ds.map(h=>h.share))}));}
- return {errors:unique(errors),...law,gross,debt,net,heirs,allocation,scenario,beneficiary,date:c.date,deceased:id,errors:unique(errors),warnings:['Vývojový model čeká na odbornou revizi notářem.','Podíl není povinnost okamžitého vyplacení ani konkrétní rozdělení věcí.',...(heirs.some(h=>h.age!==null&&h.age<18)?['Nezletilí: projednejte správu majetku a potřebná schválení soudem.']:[]),...(debt?['Dluhy: model neurčuje odpovědnost vůči věřitelům. Projednejte výhradu soupisu.']:[]),...(scenario==='B'&&p.documents?['Tento scénář záměrně pomíjí zaznamenané pořízení pro případ smrti.']:[])]};
+ return {errors:unique(errors),...law,gross,debt,net,heirs,allocation,scenario,beneficiary,date:c.date,deceased:id,errors:unique(errors),warnings:[...(c.international?['Zahraniční vazba: výsledek je orientační model podle českého práva. Rozhodné právo a přeshraniční dopady vyžadují individuální právní posouzení.']:[]),'Vývojový model čeká na odbornou revizi notářem.','Podíl není povinnost okamžitého vyplacení ani konkrétní rozdělení věcí.',...(heirs.some(h=>h.age!==null&&h.age<18)?['Nezletilí: projednejte správu majetku a potřebná schválení soudem.']:[]),...(debt?['Dluhy: model neurčuje odpovědnost vůči věřitelům. Projednejte výhradu soupisu.']:[]),...(scenario==='B'&&p.documents?['Tento scénář záměrně pomíjí zaznamenané pořízení pro případ smrti.']:[])]};
 }
 export function applyDeath(c,result){
  if(result.errors?.length||result.allocation||!result.heirs)throw Error('Tento výsledek nelze přenést do následného úmrtí.');

@@ -66,7 +66,7 @@ export function statutory(c,id){
  return result(0,[{id:'STATE',share:1}]);
 }
 export function calculate(c,id,{scenario='A',beneficiary}={}){
- let errors=validate(c);if(c.intake&&(!c.intake.reviewed||!Array.isArray(c.intake.issues)||!c.intake.issues.every(i=>i.resolved&&typeof i.note==='string'&&i.note.trim())))errors.push('Dotazník klienta musí nejdříve zkontrolovat poradce.');const p=c.people?.find(p=>p.id===id);
+ let errors=validate(c);if(c.intake&&!c.intake.reviewed)errors.push('Převezměte odpovědi klienta nebo je nejprve upravte.');const p=c.people?.find(p=>p.id===id);
  if(!p)return {errors:[...errors,'Vyberte osobu pro simulaci.']};
  if(p.dead||p.death)errors.push('Tato osoba již zemřela.');
  if(!c.complete)errors.push('Potvrďte úplnost relevantních rodinných vztahů a majetku.');
@@ -79,6 +79,7 @@ export function calculate(c,id,{scenario='A',beneficiary}={}){
  if(c.assets.some(a=>a.currency!=='CZK'))errors.push('Cizí měna vyžaduje ověřený přepočet do CZK i pro celkovou majetkovou pozici dědiců.');
  const relevant=c.assets.filter(a=>a.owners?.[id]>0);
  for(const a of relevant){
+  if(a.intakeUnknownValue)errors.push(`Doplňte neznámou hodnotu: ${a.name}.`);
   if(a.currency!=='CZK')errors.push('Cizí měna vyžaduje ověřený přepočet do CZK.');
   if(!a.verified||['unknown','modified'].includes(a.regime)||a.category==='Ručení')errors.push(`Neověřený právní režim: ${a.name}.`);
   if(a.regime==='sjm'){

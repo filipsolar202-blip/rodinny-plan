@@ -49,3 +49,8 @@ Zabezpečení partnera ukazuje nejprve prioritního příjemce a u potomků odvo
 Podklady: [gov.cz – Nepominutelný dědic](https://portal.gov.cz/informace/nepominutelny-dedic-INF-78), [Notářská komora – FAQ](https://www.nkcr.cz/vasi-notari/detail/239_1104-faq-casto-kladene-dotazy-(zavet-a-dedeni)). Kontrola těchto veřejných vysvětlení nenahrazuje odbornou revizi celé metodiky.
 
 Popisky příbuzenství vycházejí z evidovaných vazeb. Postavička je volitelný vzhled, ne vstup do výpočtu. Chybějící rodič se nedomýšlí podle jména či partnerství; původní slovní popis z dotazníku zůstává označen jako tvrzení klienta.
+
+## Převzetí klientských odpovědí a krátký výstup (16. 10. 2026)
+Poradce volí převzetí odpovědí, nebo jejich úpravu. Převzetí zaznamenává zdroj údajů; nejde o nezávislé ověření. Známé hodnoty a uvedené vlastnictví lze použít bez povinných poznámek ke každé položce. Neznámé hodnoty se nikdy nepovažují za potvrzené nuly. Právní situace mimo rozsah modelu zůstávají označené.
+Majetek přijatý darem se odlišuje od darů poskytnutých zůstavitelem. Nabytí darem samo o sobě nezapíná blokaci započtení poskytnutých darů. U položek se uvádí vlastník, režim a způsob nabytí podle klienta. Podklad: https://portal.gov.cz/informace/zakonny-rezim-spolecneho-jmeni-manzelu-INF-50
+Výchozí prezentace obsahuje pouze majetek, rodinné větve, modelovou pozůstalost, příjemce a další kroky. Krizový manuál zůstává dostupný v aplikaci. Rozsáhlá rodina či majetek se stránkují.

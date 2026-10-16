@@ -40,3 +40,12 @@ Každý záznam má ID, ustanovení, postup, podmínky/výjimky a test níže. S
 A: aktuální stav. B: model bez pořízení pro případ smrti. C: evidence existující závěti s blokací přesného výsledku. D: hypotetické hodnotové maximum pro zvoleného partnera po odečtení povinných dílů potomků; není to hotová závěť ani prokázané maximum pro každou situaci. E: hypotetická alokace celku potomkům podle jejich kmenů. F: kopie případu s převodem položky; darování nevratné a může mít další důsledky. G: návazné zákonné modely se zachováním hodnot položek. D/E jsou hodnotové varianty k notáři, nelze je přenášet jako rozhodnuté právní nabytí.
 
 Likvidita: kladný měsíční deficit × počet měsíců + jednorázové výdaje + výslovně zadané vypořádání − dostupná rezerva − očekávané pojistné plnění. Zákonný podíl se do hotovostní potřeby nepřičítá automaticky. Rezerva musí být pozůstalým skutečně dostupná a nesmí se započítat dvakrát. Pojistné plnění je scénářový odhad, nikoli garantované plnění. Daně, výnosy, inflace a čas vyřízení nejsou automaticky modelovány.
+
+
+## Zobrazení hodnotových variant (16. 10. 2026)
+
+Zabezpečení partnera ukazuje nejprve prioritního příjemce a u potomků odvození minima (¾ zákonného podílu nezletilého, ¼ zletilého). Zabezpečení dětí je hypotetické závětní řešení; není automatickým zákonným rozdělením. Manžel/ka není nepominutelným dědicem, může mít v této variantě nulové dědictví, ale zůstává mu/jí vlastní majetek a modelový výsledek vypořádání SJM. Tabulky vždy rozlišují zákonnou referenci, dědictví ve variantě a vlastní čistý majetek. Celková hodnota varianty nepřičítá zároveň zákonné dědictví. Neřeší se konkrétní věci, bydlení ani další případná práva pozůstalého.
+
+Podklady: [gov.cz – Nepominutelný dědic](https://portal.gov.cz/informace/nepominutelny-dedic-INF-78), [Notářská komora – FAQ](https://www.nkcr.cz/vasi-notari/detail/239_1104-faq-casto-kladene-dotazy-(zavet-a-dedeni)). Kontrola těchto veřejných vysvětlení nenahrazuje odbornou revizi celé metodiky.
+
+Popisky příbuzenství vycházejí z evidovaných vazeb. Postavička je volitelný vzhled, ne vstup do výpočtu. Chybějící rodič se nedomýšlí podle jména či partnerství; původní slovní popis z dotazníku zůstává označen jako tvrzení klienta.

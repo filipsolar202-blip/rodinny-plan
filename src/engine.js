@@ -100,7 +100,7 @@ export function calculate(c,id,{scenario='A',beneficiary}={}){
   allocation=heirs.filter(h=>h.reserved).map(h=>({id:h.id,value:h.minimum}));allocation.push({id:beneficiary,value:net-sum(heirs.map(h=>h.minimum))});
  }
  if(scenario==='E'){const ds=heirs.filter(h=>h.descendant);if(!ds.length)errors.push('Model zabezpečení dětí vyžaduje potomky.');else allocation=ds.map(h=>({id:h.id,value:net*h.share/sum(ds.map(h=>h.share))}));}
- return {errors:unique(errors),...law,gross,debt,net,heirs,allocation,scenario,date:c.date,deceased:id,errors:unique(errors),warnings:['Vývojový model čeká na odbornou revizi notářem.','Podíl není povinnost okamžitého vyplacení ani konkrétní rozdělení věcí.',...(heirs.some(h=>h.age!==null&&h.age<18)?['Nezletilí: projednejte správu majetku a potřebná schválení soudem.']:[]),...(debt?['Dluhy: model neurčuje odpovědnost vůči věřitelům. Projednejte výhradu soupisu.']:[]),...(scenario==='B'&&p.documents?['Tento scénář záměrně pomíjí zaznamenané pořízení pro případ smrti.']:[])]};
+ return {errors:unique(errors),...law,gross,debt,net,heirs,allocation,scenario,beneficiary,date:c.date,deceased:id,errors:unique(errors),warnings:['Vývojový model čeká na odbornou revizi notářem.','Podíl není povinnost okamžitého vyplacení ani konkrétní rozdělení věcí.',...(heirs.some(h=>h.age!==null&&h.age<18)?['Nezletilí: projednejte správu majetku a potřebná schválení soudem.']:[]),...(debt?['Dluhy: model neurčuje odpovědnost vůči věřitelům. Projednejte výhradu soupisu.']:[]),...(scenario==='B'&&p.documents?['Tento scénář záměrně pomíjí zaznamenané pořízení pro případ smrti.']:[])]};
 }
 export function applyDeath(c,result){
  if(result.errors?.length||result.allocation||!result.heirs)throw Error('Tento výsledek nelze přenést do následného úmrtí.');

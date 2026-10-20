@@ -1,4 +1,7 @@
 import {readFile,writeFile,mkdir,cp,rm} from 'node:fs/promises';
+const {appVersion}=await import('../src/version.js');
+const pkg=JSON.parse(await readFile('package.json','utf8'));
+if(pkg.version!==appVersion)throw Error('Číslo verze v package.json a src/version.js se musí shodovat.');
 await rm('dist',{recursive:true,force:true});await mkdir('dist/docs',{recursive:true});
 for(const f of ['index.html','Fustat-OFL.txt','dotaznik.html'])await cp(f,'dist/'+f);
 await cp('src','dist/src',{recursive:true});await cp('docs/METODIKA.md','dist/docs/METODIKA.md');await writeFile('dist/.nojekyll','');

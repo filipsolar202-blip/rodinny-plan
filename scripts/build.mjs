@@ -4,7 +4,7 @@ for(const f of ['index.html','Fustat-OFL.txt','dotaznik.html'])await cp(f,'dist/
 await cp('src','dist/src',{recursive:true});await cp('docs/METODIKA.md','dist/docs/METODIKA.md');await writeFile('dist/.nojekyll','');
 const read=f=>readFile(f,'utf8');
 const css=await read('src/style.css')+'\n'+await read('src/questionnaire.css')+'\n/*'+await read('Fustat-OFL.txt')+'*/';
-const js=(await read('src/intake-contract.js')).replace(/^export /gm,'')+'\n'+(await read('src/questionnaire.js')).replace(/^import .*?;\n/gm,'');
+const js=(await read('src/brand-assets.js')).replace(/^export /gm,'')+'\n'+(await read('src/plan-data.js')).replace(/^export /gm,'')+'\n'+(await read('src/intake-contract.js')).replace(/^import .*?;\n/gm,'').replace(/^export /gm,'')+'\n'+(await read('src/questionnaire.js')).replace(/^import .*?;\n/gm,'');
 const html=(await read('dotaznik.html')).replace(/<link[^>]+>/g,'').replace('</head>','<style>'+css+'</style></head>').replace(/<script[^>]+><\/script>/,'<script type="module">'+js.replace(/<\/script/gi,'<\\/script')+'</script>');
 await writeFile('dist/dotaznik-samostatny.html',html);
 // Version the complete module graph and report styles so browser/CDN caches cannot mix releases.

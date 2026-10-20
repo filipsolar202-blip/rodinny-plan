@@ -1,5 +1,6 @@
 import {blank,uid} from './data.js';
 import {intakeErrors,criticalQuestions,budgetLabels} from './intake-contract.js';
+import {crisisOf} from './plan-data.js';
 export function importQuestionnaire(d){
  const errors=intakeErrors(d);if(d.status!=='submitted'||errors.length)throw Error(errors.join(' ')||'Dotazník není dokončený.');
  const c=blank(d.self.name+' — rodinný plán'),self='self',ids=new Map(d.people.map(p=>[p.id,uid()]));
@@ -10,6 +11,7 @@ export function importQuestionnaire(d){
  for(const [k,v] of Object.entries(d.answers))if(v==='unknown')add('Klient neví: '+criticalQuestions[k],['assets','debts','maritalProperty','gifts'].includes(k)?'assets':'family');
  for(const a of d.assets){let owners={[self]:1},regime='unknown';if(a.owner==='me')regime='exclusive';if(a.owner==='person'){owners={[ids.get(a.person)]:1};regime='exclusive';}if(a.owner==='joint'){owners={[self]:.5,[ids.get(spouse.id)]:.5};regime=d.answers.maritalProperty==='yes'?'modified':'sjm';}if(a.owner==='shares'){owners={[self]:Number(a.share)/100,[ids.get(a.person)]:1-Number(a.share)/100};regime='shares';}
  c.assets.push({id:uid(),name:a.name,kind:a.kind,category:a.category||(a.kind==='debt'?'Další závazky':'Ostatní majetek'),value:a.valueUnknown?0:Number(a.value),currency:a.currency,owners,regime,verified:false,clientProvided:true,liquid:!!a.liquid,acquisition:({purchase:'Koupě',before:'Před manželstvím',gift:'Dar',inheritance:'Dědictví',unknown:'Neznámé'})[a.acquisition],notes:a.note||'',updated:c.date,intakeUnknownValue:!!a.valueUnknown});if(a.valueUnknown||a.owner==='unknown')add(`${a.name}: ${a.valueUnknown?'Hodnotu doplníme. ':''}${a.owner==='unknown'?'Vlastníky doplníme.':''}`,'assets');}
+ c.crisis=structuredClone(crisisOf(d));c.plan={primary:self,...(spouse||d.people.find(p=>p.role==='partner'))?{partner:ids.get((spouse||d.people.find(p=>p.role==='partner')).id)}:{}};
  c.people[0].documents=d.answers.will==='yes';c.people[0].documentNotes=d.manual.documents||'';c.international=d.answers.international==='yes';c.gifts=d.answers.gifts==='yes';if(d.answers.exceptions==='yes'||d.self.status==='registered')c.people[0].exception=true;if(d.answers.maritalProperty==='yes')add('Existuje smluvený režim SJM. Položky označit jako upravený režim a posoudit notářem.','assets');
  for(const k of Object.keys(budgetLabels)){c.financial[k]=d.budget[k].unknown?0:Number(d.budget[k].value);if(d.budget[k].unknown)add('Doplnit údaj: '+budgetLabels[k]+' Nula není potvrzená částka.','protection');}
  c.manual={...c.manual,...d.manual};c.manual.notes=[c.manual.notes,d.notes].filter(Boolean).join('\n');c.intake={version:1,unknownFinancial:Object.keys(budgetLabels).filter(k=>d.budget[k].unknown),receivedAt:new Date().toISOString(),reviewed:false,issues,source:structuredClone(d)};return c;

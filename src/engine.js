@@ -1,4 +1,5 @@
 import {intakeErrors} from './intake-contract.js';
+import {extensionErrors} from './plan-data.js';
 /** Pure calculation layer. Money stays unrounded until presentation. */
 export const clone = x => structuredClone(x);
 export const today = () => new Intl.DateTimeFormat('sv-SE',{timeZone:'Europe/Prague'}).format(new Date());
@@ -31,7 +32,7 @@ export function validate(c){
  }
  if(new Set(c.assets.map(a=>a.id)).size!==c.assets.length)add('Duplicitní ID majetku.');
  if(!c.financial||['expenses','income','months','oneOff','settlement','reserve','insurance'].some(key=>typeof c.financial[key]!=='number'||!Number.isFinite(c.financial[key])||c.financial[key]<0))add('Finanční vstupy musí být nezáporná čísla.');
- return unique(errors);
+ return unique([...errors,...extensionErrors(c)]);
 }
 export function statutory(c,id){
  const people=c.people, by=id=>people.find(p=>p.id===id), alive=id=>by(id)&&!by(id).dead&&!by(id).death;

@@ -6,7 +6,7 @@ Zdroje: zákon č. 89/2012 Sb. v aktuálním znění 1. 1.–31. 12. 2026 na htt
 
 ## Výpočetní kontrakt
 
-Pracujeme s potvrzeným úplným okruhem právních příbuzných, jedním rozhodným dnem a českým právem. Neznámý příbuzný není automaticky zemřelý. Uživatel potvrzuje úplnost vstupů. Rodičovské vazby jsou právní; biologické vazby zaniklé osvojením se nezapisují současně jako právní. Osvojení se eviduje, ale pro jeho různé právní účinky výpočet vyžaduje individuální posouzení. Nejasná časová posloupnost úmrtí, neznámý věk potomka, právní výjimky, zahraniční prvek, zpochybněné vlastnictví a neověřená domácnost zastavují výsledky. § 1641: více souběžných titulů ve stejné třídě se sčítá; komplikované rodové smyčky se odmítají.
+Pracujeme s potvrzeným úplným okruhem právních příbuzných, jedním rozhodným dnem a českým právem. Neznámý příbuzný není automaticky zemřelý. Uživatel potvrzuje úplnost vstupů. Rodičovské vazby jsou právní; biologické vazby zaniklé osvojením se nezapisují současně jako právní. Osvojení se eviduje, ale pro jeho různé právní účinky výpočet vyžaduje individuální posouzení. Nejasná časová posloupnost úmrtí, neznámý věk potomka, právní výjimky, zpochybněné vlastnictví a neověřená domácnost zastavují výsledky. § 1641: více souběžných titulů ve stejné třídě se sčítá; komplikované rodové smyčky se odmítají.
 
 ## Registr pravidel
 

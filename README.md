@@ -22,7 +22,7 @@ Node.js 22+: `npm test`. Instalace balíčků není potřeba.
 
 Viz [metodika](docs/METODIKA.md). Kontrola veřejných zdrojů 15. 10. 2026 není odborným právním ověřením. Před klientským použitím musí model a jeho rozsah schválit kvalifikovaný český právník nebo notář.
 
-Automatizován je pracovní model šesti zákonných tříd, běžné reprezentace, povinných dílů dle věku a výslovně zvoleného vypořádání SJM. Nejasné vlastnictví, cizí měny, upravené SJM, dary k započtení, právní výjimky, osvojení, partnerství se zvláštními účinky, zahraničí, předlužení a platnost závětí/smluv vyžadují individuální posouzení; přesný výsledek je blokován. Aplikace nerozhoduje o dluhové odpovědnosti a nezaměňuje podíl za hotovostní nárok.
+Automatizován je pracovní model šesti zákonných tříd, běžné reprezentace, povinných dílů dle věku a výslovně zvoleného vypořádání SJM. Nejasné vlastnictví, cizí měny, upravené SJM, dary k započtení, právní výjimky, osvojení, partnerství se zvláštními účinky, předlužení a platnost závětí/smluv vyžadují individuální posouzení; přesný výsledek je blokován. Aplikace nerozhoduje o dluhové odpovědnosti a nezaměňuje podíl za hotovostní nárok.
 
 Pátá a šestá třída vyžadují evidenci obou rodičů a čtyř prarodičů včetně zemřelých. Úplnost dalších relevantních vazeb potvrzuje uživatel. Právo osvojených osob není popíráno: automatický výpočet je blokován kvůli různým právním účinkům osvojení.
 
@@ -55,9 +55,12 @@ Paleta odpovídá FILIP CRM: modrá #356aa5, doplňková #4b7da3, text #234366 a
 1. V přehledu zkopírujte odkaz na `dotaznik.html` nebo stáhněte samostatný HTML soubor. Soubor funguje i bez připojení; příjemce jej musí otevřít v prohlížeči (náhled přílohy nemusí spouštět formulář).
 2. Klient projde sedm kroků, může uložit rozpracovaný JSON a později pokračovat. Důležité otázky mají povinnou odpověď, včetně výslovného „Nevím“.
 3. V posledním kroku stáhne `odpovedi-rodinny-plan.json` a předá jej poradci dohodnutým kanálem. Formulář nic automaticky neposílá.
-4. Tlačítko „Nahrát odpovědi / zálohu“ vytvoří nový případ; existující nepřepíše. Rozpracovaný či neúplný dotazník odmítne. Neznámé hodnoty zůstávají označené a výpočet je blokovaný do kontroly.
-5. V části Dotazník klienta doplňte skutečné údaje v rodině, majetku a financích. Každý kontrolní bod vyžaduje popis zjištění a potvrzení. Majetek musí mít ověřené hodnoty i vlastnictví. Poté potvrďte úplnost ve správě případu. Kontrola poradcem nenahrazuje právní revizi modelu.
-6. Klientský report je prezentace s postavami, grafickými podíly, navigací a rozbalovacím vysvětlením. HTML obsahuje vzhled i písmo a lze je předat samostatně.
-7. Tisk / PDF: A4 na šířku, 100 %, vypnutá záhlaví a zápatí prohlížeče. Každé téma má vlastní stránku; dlouhý manuál se dělí na pokračování. Tisk zahrnuje všechny stránky i rozbalovací vysvětlení.
+4. Tlačítko „Nahrát odpovědi / zálohu“ vytvoří nový případ; existující nepřepíše. Rozpracovaný či neúplný dotazník odmítne.
+5. Zvolte převzetí klientských údajů, nebo je upravte. Převzetí nevyžaduje nové poznámky ke každé částce. Výslovně neznámé údaje zůstávají neznámé; upozornění odkazuje na konkrétní položku. Zahraniční vazba je upozornění k individuálnímu posouzení, nikoli blokace českého modelu.
+6. V části Krizový plán doplňte kontakty, pojistky, provozní smlouvy, dostupné zdroje, nároky a úkoly. Tyto údaje lze předat také novou verzí dotazníku.
+7. Dva klientské výstupy: podrobný dědický plán (jmění, dva samostatné zákonné scénáře, povinné díly, možnosti) a krizový plán (smlouvy, praktické postupy, státní/soukromé zabezpečení, disponibilita, QR návody). Kontakty a termín aktualizace lze upravit v nastavení výstupu.
+8. Pro schůzku zůstává krátká prezentace. Každý výstup lze stáhnout jako samostatné offline HTML. Tisk/PDF podrobných plánů: A4 na výšku, 100 %, bez záhlaví a zápatí prohlížeče; krátká prezentace na šířku. HTML navigace nemění úplnost tištěného dokumentu.
+
+Výstupy používají dodané logo a lva Fair Life. Výchozí zpracovatel: Filip Solár, +420 602 190 240, f.solar@fair-life.cz, www.filipsolar.cz. Podklady k podobě dokumentů a rozsah adaptace viz [poznámky k plánům](docs/KLIENTSKE-PLANY.md).
 
 Sestavení: `npm run build`; pro kompletní místní náhled spusťte server v `dist`. `npm test` ověřuje výpočty, povinné odpovědi, import a bezpečné generování prezentace. `node scripts/sample-report.mjs` vytvoří pouze smyšlené kontrolní HTML v ignorované složce `output/pdf`. Tato složka se na GitHub Pages neposílá.

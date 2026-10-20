@@ -1,3 +1,4 @@
+import {blankCrisis,extensionErrors} from './plan-data.js';
 export const intakeType='family-plan-questionnaire';
 export const choices=[['yes','Ano'],['no','Ne'],['unknown','Nevím, potřebuji pomoct']];
 export const roles={child:'Moje dítě',spouse:'Manžel / manželka',partner:'Partner / partnerka (bez svatby)',ex:'Bývalý partner / manželství',parent:'Můj rodič',sibling:'Můj sourozenec',other:'Jiný člen rodiny nebo domácnosti'};
@@ -11,6 +12,7 @@ export function intakeErrors(d,step=null){
  const out=[],at=(n,msg)=>{if(step===null||step===n)out.push(msg);};
  if(!d||d.type!==intakeType||d.version!==1||!d.self||!Array.isArray(d.people)||!d.answers||!Array.isArray(d.assets)||!d.budget||!d.manual||!d.confirm)return ['Neplatný soubor dotazníku.'];
  if([d.self,d.answers,d.budget,d.manual,d.confirm].some(v=>typeof v!=='object'||Array.isArray(v)))return ['Neplatná struktura dotazníku.'];
+ for(const message of extensionErrors({crisis:d.crisis}))at(5,message);
  if(d.people.length>100||d.assets.length>500)return ['Dotazník je příliš velký.'];
  if(!textOK(d.self.name,120)||!d.self.name.trim())at(0,'Napište, jak vám máme říkat.');
  if(!d.self.birthUnknown&&(!dateOK(d.self.birth)||d.self.birth>d.date))at(0,'Doplňte narození, nebo zvolte Nevím.');
@@ -41,4 +43,4 @@ export function intakeErrors(d,step=null){
  for(const k of Object.keys(budgetLabels)){const b=d.budget[k];if(!b||!b.unknown&&!amountOK(b.value))at(5,`Doplňte: ${budgetLabels[k]} Nebo zvolte Nevím.`);if(k==='months'&&b&&!b.unknown&&(!Number.isInteger(Number(b.value))||Number(b.value)<1||Number(b.value)>600))at(5,'Doba zajištění musí být 1 až 600 celých měsíců.');}
  for(const k of ['family','property','truth','delivery'])if(d.confirm[k]!==true)at(6,'Na konci potvrďte všechny čtyři body.');if(!dateOK(d.date))at(0,'Neplatné datum dotazníku.');return [...new Set(out)];
 }
-export function parseIntake(text,{draft=false}={}){if(text.length>5_000_000)throw Error('Maximum 5 MB.');const d=JSON.parse(text);if(d?.type!==intakeType||d.version!==1)throw Error('Nejde o podporovaný dotazník.');if(!draft&&d.status!=='submitted')throw Error('Toto je rozpracovaný dotazník. Klient musí stáhnout hotové odpovědi v posledním kroku.');const errors=intakeErrors(d);if(draft&&(d.people?.some(p=>!p||typeof p!=='object')||d.assets?.some(a=>!a||typeof a!=='object')||Object.keys(budgetLabels).some(k=>!d.budget?.[k]||typeof d.budget[k]!=='object')))throw Error('Poškozený soubor.');if(!draft&&errors.length)throw Error(errors.join('\n'));if(draft&&(!d.self||!Array.isArray(d.people)||!d.answers||!Array.isArray(d.assets)||!d.budget||!d.manual||!d.confirm))throw Error('Poškozený soubor.');return d;}
+export function parseIntake(text,{draft=false}={}){if(text.length>5_000_000)throw Error('Maximum 5 MB.');const d=JSON.parse(text);if(d?.type!==intakeType||d.version!==1)throw Error('Nejde o podporovaný dotazník.');if(!draft&&d.status!=='submitted')throw Error('Toto je rozpracovaný dotazník. Klient musí stáhnout hotové odpovědi v posledním kroku.');const errors=intakeErrors(d);if(extensionErrors({crisis:d.crisis}).length)throw Error('Poškozená krizová část dotazníku.');if(draft&&(d.people?.some(p=>!p||typeof p!=='object')||d.assets?.some(a=>!a||typeof a!=='object')||Object.keys(budgetLabels).some(k=>!d.budget?.[k]||typeof d.budget[k]!=='object')))throw Error('Poškozený soubor.');if(!draft&&errors.length)throw Error(errors.join('\n'));if(draft&&(!d.self||!Array.isArray(d.people)||!d.answers||!Array.isArray(d.assets)||!d.budget||!d.manual||!d.confirm))throw Error('Poškozený soubor.');return d;}

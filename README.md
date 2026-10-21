@@ -55,7 +55,7 @@ Paleta odpovídá FILIP CRM: modrá #356aa5, doplňková #4b7da3, text #234366 a
 1. V přehledu zkopírujte odkaz na `dotaznik.html` nebo stáhněte samostatný HTML soubor. Soubor funguje i bez připojení; příjemce jej musí otevřít v prohlížeči (náhled přílohy nemusí spouštět formulář).
 2. Klient projde sedm kroků, může uložit rozpracovaný JSON a později pokračovat. Důležité otázky mají povinnou odpověď, včetně výslovného „Nevím“.
 3. V posledním kroku stáhne `odpovedi-rodinny-plan.json` a předá jej poradci dohodnutým kanálem. Formulář nic automaticky neposílá.
-4. Tlačítko „Nahrát odpovědi / zálohu“ vytvoří nový případ; existující nepřepíše. Rozpracovaný či neúplný dotazník odmítne.
+4. Tlačítko „Nahrát odpovědi / zálohu“ vytvoří nový případ; existující nepřepíše. Běžný neúplný dotazník odmítne; pracovní přenos z CRM nebo plánu lze načíst po náhledu jako rozpracované podklady.
 5. Zvolte převzetí klientských údajů, nebo je upravte. Převzetí nevyžaduje nové poznámky ke každé částce. Výslovně neznámé údaje zůstávají neznámé; upozornění odkazuje na konkrétní položku. Zahraniční vazba je upozornění k individuálnímu posouzení, nikoli blokace českého modelu.
 6. V části Krizový plán doplňte kontakty, pojistky, provozní smlouvy, dostupné zdroje, nároky a úkoly. Tyto údaje lze předat také novou verzí dotazníku.
 7. Dva klientské výstupy: podrobný dědický plán (jmění, dva samostatné zákonné scénáře, povinné díly, možnosti) a krizový plán (smlouvy, praktické postupy, státní/soukromé zabezpečení, disponibilita, QR návody). Kontakty a termín aktualizace lze upravit v nastavení výstupu.
@@ -64,3 +64,14 @@ Paleta odpovídá FILIP CRM: modrá #356aa5, doplňková #4b7da3, text #234366 a
 Výstupy používají dodané logo a lva Fair Life. Výchozí zpracovatel: Filip Solár, +420 602 190 240, f.solar@fair-life.cz, www.filipsolar.cz. Podklady k podobě dokumentů a rozsah adaptace viz [poznámky k plánům](docs/KLIENTSKE-PLANY.md).
 
 Sestavení: `npm run build`; pro kompletní místní náhled spusťte server v `dist`. `npm test` ověřuje výpočty, povinné odpovědi, import a bezpečné generování prezentace. `node scripts/sample-report.mjs` vytvoří pouze smyšlené kontrolní HTML v ignorované složce `output/pdf`. Tato složka se na GitHub Pages neposílá.
+
+
+## Dotazník e-mailem a přenos s CRM (1.2.0)
+
+- Prázdný dotazník: na úvodní stránce stáhněte **Dotazník HTML** nebo zkopírujte odkaz.
+- Předvyplněný dotazník: otevřete klientský případ a nahoře klikněte **Dotazník pro klienta**. Přiložte stažený `dotaznik-pro-klienta.html` k e-mailu. Obsahuje údaje tohoto případu.
+- Klient stáhne přílohu, otevře ji v prohlížeči, projde sedm kroků a na konci stáhne odpovědi JSON. Tento JSON pošle zpět. Pokud pošta blokuje HTML přílohy, pošlete odkaz na prázdný dotazník a pracovní JSON pro tlačítko **Pokračovat ze souboru**.
+- Vrácený JSON načtěte přes **Nahrát odpovědi / zálohu**. Zkontrolujte náhled a vytvořte nový případ. Existující případ se nepřepisuje; opakovaný identifikátor vyžaduje výslovné potvrzení nové kopie.
+- **Přenos do CRM** vytvoří pracovní JSON `family-plan-questionnaire` v1. Stejný formát lze importovat z CRM. Přenos není synchronizace ani sloučení případů.
+- Zachovává se `exchange.clientRef`, ID majetku, `sourceKey`, data ocenění a smlouvy. Export z plánu je vždy `draft` s neudělenými klientskými potvrzeními. Neznámé hodnoty zůstávají neznámé, měny oddělené a pojistné krytí se nesčítá s majetkem. Smlouvy z přenosu se zachovávají jako metadata.
+- Žádný soubor se automaticky neodesílá. Záloha případu a soubor pro CRM mají odlišný účel; úplnou zálohu uchovejte zvlášť.

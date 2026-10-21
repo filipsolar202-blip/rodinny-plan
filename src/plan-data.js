@@ -1,3 +1,4 @@
+import {exchangeErrors,contactErrors} from './exchange-contract.js';
 // Optional extension of v1 records. Older case files remain readable.
 export const advisorDefaults={name:'Filip Solár',brand:'Fair Life',phone:'+420 602 190 240',email:'f.solar@fair-life.cz',web:'www.filipsolar.cz',address:''};
 export const crisisTables={
@@ -20,7 +21,7 @@ export function planPeople(c){
  return [primary,...partner&&partner.id!==primary.id?[partner]:[]];
 }
 export function extensionErrors(c){
- const out=[];
+ const out=[...exchangeErrors(c.exchange),...contactErrors(c.contact)];
  if(c.crisis!==undefined){
   if(!c.crisis||typeof c.crisis!=='object'||Array.isArray(c.crisis))return ['Neplatná data krizového plánu.'];
   for(const [key,schema] of Object.entries(crisisTables)){
